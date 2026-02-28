@@ -3,7 +3,7 @@ name: Eureka Server - Docker CI
 on:
   push:
     branches: [ "main" ]
-  workflow_dispatch: 
+  workflow_dispatch:
 
 jobs:
   build:
@@ -11,7 +11,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and push
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '21'
+          cache: 'maven'
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push with Jib
         run: |
-          docker build -f Dockerfile -t ${{ secrets.DOCKERHUB_USERNAME }}/eurekaserver:latest .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/eurekaserver:latest
+          mvn -B compile jib:build \
+            -Djib.to.auth.username=${{ secrets.DOCKERHUB_USERNAME }} \
+            -Djib.to.auth.password=${{ secrets.DOCKERHUB_TOKEN }}
