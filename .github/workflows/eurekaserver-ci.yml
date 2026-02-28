@@ -43,11 +43,7 @@ jobs:
           echo "${{ secrets.KUBE_CONFIG }}" | tr -d '\n\r ' | base64 -d > $HOME/.kube/config
           chmod 600 $HOME/.kube/config
 
-      - name: Apply manifest
-        run: |
-          kubectl --insecure-skip-tls-verify apply -f k8s/eurekaserver.yml -n default
-
-      - name: Restart deployment
+      - name: Restart eurekaserver deployment
         run: |
           kubectl --insecure-skip-tls-verify -n default rollout restart deployment/eurekaserver
           kubectl --insecure-skip-tls-verify -n default rollout status deployment/eurekaserver
