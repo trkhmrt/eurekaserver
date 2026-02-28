@@ -21,3 +21,14 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetchRegistry: false
+    registerWithEureka: false
+    serviceUrl:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+      
+server:
+  port: 8070
