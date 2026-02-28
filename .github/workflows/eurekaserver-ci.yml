@@ -45,7 +45,7 @@ jobs:
 
       - name: Apply manifest
         run: |
-          kubectl --insecure-skip-tls-verify apply -f k8s/eurekaserver.yaml -n default
+          kubectl --insecure-skip-tls-verify apply -f k8s/eurekaserver.yml -n default
 
       - name: Restart deployment
         run: |
